@@ -37,20 +37,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initGride() {
-         highLightGuideViewFirst = HighLightGuideView.buildHomePageFirst(this, textView1)
-                .setOnDismissListener(new HighLightGuideView.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        highLightGuideViewSecond.show();
-                    }
-                });
-         highLightGuideViewSecond = HighLightGuideView.buildHomePageSecond(this, textView2)
-                .setOnDismissListener(new HighLightGuideView.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        highLightGuideViewThird.show();
-                    }
-                });
-         highLightGuideViewThird = HighLightGuideView.buildHomePageThird(this, textView3);
+         highLightGuideViewFirst = HighLightGuideView.buildHomePageFirst(this, textView1,textView2,textView3);
+
     }
 }

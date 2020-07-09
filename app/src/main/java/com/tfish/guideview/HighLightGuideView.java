@@ -80,22 +80,10 @@ public class HighLightGuideView extends View {
         return new HighLightGuideView(activity, guideType);
     }
 
-    public static HighLightGuideView buildHomePageFirst(Activity activity, View view) {
+    public static HighLightGuideView buildHomePageFirst(Activity activity, View view, View view2, View view3) {
         return HighLightGuideView.builder(activity, GUIDE_HOMEPAGE_FIRST)
-                .addHighLightGuidView(view)
-                .addTipBitMaps(R.mipmap.pic_guide4);
-    }
-
-    public static HighLightGuideView buildHomePageSecond(Activity activity, View parent) {
-        return HighLightGuideView.builder(activity, GUIDE_HOMEPAGE_SECOND)
-                .addHighLightGuidView(parent)
-                .addTipBitMaps(R.mipmap.pic_guide3);
-    }
-
-    public static HighLightGuideView buildHomePageThird(Activity activity, View view) {
-        return HighLightGuideView.builder(activity, GUIDE_HOMEPAGE_THIRD)
-                .addHighLightGuidView(view)
-                .addTipBitMaps(R.mipmap.pic_guide2, R.mipmap.pic_guide1);
+                .addHighLightGuidView(view, view2, view3)
+                .addTipBitMaps(R.mipmap.guidance_07, R.mipmap.guidance_03, R.mipmap.guidance_11, R.mipmap.guidance_17, R.mipmap.guidance_15, R.mipmap.guidance_22);
     }
 
 
@@ -144,169 +132,37 @@ public class HighLightGuideView extends View {
         canvas.drawBitmap(fgBitmap, 0, 0, null);
         switch (guideType) {
             case GUIDE_HOMEPAGE_FIRST:
-                drawHomepageFirst(canvas);
-                break;
-            case GUIDE_HOMEPAGE_SECOND:
-                drawHomepageSecond(canvas);
-                break;
-            case GUIDE_HOMEPAGE_THIRD:
-                drawHomepageThird(canvas);
+                drawHomepage(canvas);
                 break;
             default:
                 return;
         }
     }
 
-    private void drawHomepageFirst(Canvas canvas) {
+    private void drawHomepage(Canvas canvas) {
         mPath = new Path();
-        float radius = ViewUtils.dip2px(getContext(), 9);
-        //高亮控件宽高
-        int vWidth = targetViews.get(0).getWidth();
-        int height = targetViews.get(0).getHeight();
-        Log.d(TAG, "高亮控件宽: " + vWidth + "--高亮控件高: " + height);
-        //获取获取高亮控件坐标
-        int left = 0;
-        int top = 0;
-        int right = 0;
-        int bottom = 0;
-        try {
-            Rect rtLocation = getLocationInView(((ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT)).getChildAt(0), targetViews.get(0));
-            left = rtLocation.left;
-            top = rtLocation.top;
-            right = rtLocation.right;
-            bottom = rtLocation.bottom;
-            Log.d(TAG, "控件坐标左: " + left + "--顶: " + top + "--右 " + right + "--底 " + bottom);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        //绘制View区域
-        RectF rect = new RectF(left, top, right, bottom);
-        mCanvas.drawRoundRect(rect, radius, radius, mPaint);
-        //绘制三角形
-        mPath.moveTo(left + (vWidth - triangleWidth) / 2, bottom);
-        mPath.lineTo(left + (vWidth + triangleWidth) / 2, bottom);
-        mPath.lineTo(left + vWidth / 2, bottom + triangleHeight);
-        mPath.close();
-        mCanvas.drawPath(mPath, mPaint);
+        //画搜索引导图
+        View view1 = targetViews.get(0);
+        canvas.drawBitmap(tipBitmaps.get(0), null, new Rect(view1.getLeft(), view1.getTop(), view1.getRight(), view1.getBottom()), null);
+        canvas.drawBitmap(tipBitmaps.get(1), view1.getLeft() + view1.getWidth() / 3f, view1.getTop() + view1.getHeight() / 1.5f, null);
+
+        //画圈子
+        View view2 = targetViews.get(1);
+        canvas.drawBitmap(tipBitmaps.get(2), null, new Rect(view2.getLeft(), view2.getTop(), view2.getRight(), view2.getBottom()), null);
+        canvas.drawBitmap(tipBitmaps.get(3), view2.getLeft() - ViewUtils.dip2px(getContext(), 70), view2.getTop() + view2.getHeight() / 1.3f, null);
+
+        //画我的
+        View view3 = targetViews.get(2);
+        canvas.drawBitmap(tipBitmaps.get(4), null, new Rect(view3.getLeft(), view3.getTop(), view3.getRight(), view3.getBottom()), null);
+        canvas.drawBitmap(tipBitmaps.get(5), view3.getLeft()-ViewUtils.dip2px(getContext(), 130), view3.getTop()-view3.getHeight()-ViewUtils.dip2px(getContext(), 10) , null);
+
+
         //绘制图片
-        float bitmapLeft = left + (vWidth - tipBitmaps.get(0).getWidth()) / 2;
-        float bitmapTop = bottom + ViewUtils.dip2px(getContext(), 30);
-        canvas.drawBitmap(tipBitmaps.get(0), bitmapLeft, bitmapTop, null);
     }
-
-    private void drawHomepageSecond(Canvas canvas) {
-        mPath = new Path();
-        float radius = ViewUtils.dip2px(getContext(), 9);
-        int padding = (int) ViewUtils.dip2px(getContext(), 14);
-        //高亮控件宽高
-        int headHeight = targetViews.get(0).getHeight();
-        int vWidth = targetViews.get(0).getWidth();
-        //获取获取高亮控件坐标
-        int left = 0;
-        int top = 0;
-        int right = 0;
-        int bottom = 0;
-        try {
-            Rect rtLocation = getLocationInView(((ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT)).getChildAt(0), targetViews.get(0));
-            Log.d(TAG, "控件坐标左: " + rtLocation.left + "--顶: " + rtLocation.top + "--右 " + rtLocation.right + "--底 " + rtLocation.bottom);
-            left = rtLocation.left + padding;
-            top = rtLocation.top;
-            right = rtLocation.right - padding;
-            bottom = rtLocation.bottom;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //绘制View区域
-        RectF rect = new RectF(left, top, right, bottom);
-        mCanvas.drawRoundRect(rect, radius, radius, mPaint);
-        //绘制三角形
-        mPath.moveTo(left + (vWidth - triangleWidth) / 2, top);
-        mPath.lineTo(left + (vWidth + triangleWidth) / 2, top);
-        mPath.lineTo(left + vWidth / 2, top - triangleHeight);
-        mPath.close();
-        mCanvas.drawPath(mPath, mPaint);
-        //绘制图片
-        float bitmapLeft = left + (vWidth - tipBitmaps.get(0).getWidth()) / 2;
-        float bitmapTop = top - ViewUtils.dip2px(getContext(), 30);
-        canvas.drawBitmap(tipBitmaps.get(0), bitmapLeft, bitmapTop, null);
-    }
-
-    private void drawHomepageThird(Canvas canvas) {
-        mPath = new Path();
-        int screenWidth = ViewUtils.getScreenWidth(getContext());
-        int screenHeight = ViewUtils.getScreenHeight(getContext());
-        float radius = ViewUtils.dip2px(getContext(), 9);
-        int paddingLeft = screenWidth / 5;
-        int paddingRight = (int) ViewUtils.dip2px(getContext(), 16);
-        int paddingBottom = (int) ViewUtils.dip2px(getContext(), 4);
-        int paddingTop = (int) ViewUtils.dip2px(getContext(), 6);
-        int triangleLeft = screenWidth / 3;
-        //获取获取高亮控件坐标
-        int left = 0;
-        int top = 0;
-        int right = 0;
-        int bottom = 0;
-        try {
-            Rect rtLocation = getLocationInView(((ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT)).getChildAt(0), targetViews.get(0));
-            Log.d(TAG, "控件坐标左: " + rtLocation.left + "--顶: " + rtLocation.top + "--右 " + rtLocation.right + "--底 " + rtLocation.bottom);
-            left = rtLocation.left + paddingLeft;
-            top = rtLocation.top - paddingTop;
-            right = rtLocation.right - paddingRight;
-            bottom = rtLocation.bottom - paddingBottom;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //绘制View区域
-        RectF rect = new RectF(left, top, right, bottom);
-        mCanvas.drawRoundRect(rect, radius, radius, mPaint);
-        //绘制三角形
-        mPath.moveTo(triangleLeft, top);
-        mPath.lineTo(triangleLeft + triangleWidth, top);
-        mPath.lineTo(triangleLeft + triangleWidth / 2, top - triangleHeight);
-        mPath.close();
-        mCanvas.drawPath(mPath, mPaint);
-        //绘制图片
-        float bitmapLeft = (screenWidth - tipBitmaps.get(0).getWidth()) / 2;
-        float bitmapTop = top - ViewUtils.dip2px(getContext(), 30) - tipBitmaps.get(0).getHeight();
-        canvas.drawBitmap(tipBitmaps.get(0), bitmapLeft, bitmapTop, null);
-        canvas.drawBitmap(tipBitmaps.get(1), screenWidth - tipBitmaps.get(1).getWidth() - radius * 2, screenHeight * 2 / 3, null);
-    }
-
 
     private static final String FRAGMENT_CON = "NoSaveStateFrameLayout";
 
-    private Rect getLocationInView(View parent, View child) {
-        if (child == null || parent == null) {
-            throw new IllegalArgumentException("parent and child can not be null .");
-        }
-        View decorView = null;
-        Context context = child.getContext();
-        if (context instanceof Activity) {
-            decorView = ((Activity) context).getWindow().getDecorView();
-        }
-        Rect result = new Rect();
-        Rect tmpRect = new Rect();
-
-        View tmp = child;
-
-        if (child == parent) {
-            child.getHitRect(result);
-            return result;
-        }
-        while (tmp != decorView && tmp != parent) {
-            //找到控件占据的矩形区域的矩形坐标
-            tmp.getHitRect(tmpRect);
-            if (!tmp.getClass().equals(FRAGMENT_CON)) {
-                result.left += tmpRect.left;
-                result.top += tmpRect.top;
-            }
-            tmp = (View) tmp.getParent();
-        }
-        result.right = result.left + child.getMeasuredWidth();
-        result.bottom = result.top + child.getMeasuredHeight();
-        return result;
-    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
